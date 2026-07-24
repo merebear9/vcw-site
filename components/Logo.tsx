@@ -5,12 +5,11 @@ export default function Logo({ className = "" }: { className?: string }) {
   return (
     <Link href="/" className={`flex items-center gap-2 ${className}`} aria-label="Vermilion County Watchdog home">
       <Image
-        src="/images/logo.svg"
+        src="/images/logo.png"
         alt="Vermilion County Watchdog"
-        width={320}
-        height={110}
+        width={1142}
+        height={734}
         priority
-        unoptimized
         className="h-12 w-auto sm:h-14"
       />
     </Link>

@@ -36,7 +36,7 @@ export async function generateMetadata({
   if (!article) return {};
 
   const url = siteUrl(`/articles/${article.slug}`);
-  const image = article.featuredImage ?? "/images/og-default.svg";
+  const image = article.featuredImage ?? "/images/og-default.png";
 
   return {
     title: article.title,
@@ -87,7 +87,7 @@ export default async function ArticlePage({ params }: { params: { slug: string }
     publisher: {
       "@type": "Organization",
       name: "Vermilion County Watchdog",
-      logo: { "@type": "ImageObject", url: siteUrl("/images/logo.svg") },
+      logo: { "@type": "ImageObject", url: siteUrl("/images/logo.png") },
     },
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
   };

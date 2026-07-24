@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     description: "Holding Power Accountable in Vermilion County",
     url: siteUrl(),
     siteName: "Vermilion County Watchdog",
-    images: [{ url: "/images/og-default.svg", width: 1200, height: 630 }],
+    images: [{ url: "/images/og-default.png", width: 1200, height: 630 }],
     locale: "en_US",
     type: "website",
   },
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Vermilion County Watchdog",
     description: "Holding Power Accountable in Vermilion County",
-    images: ["/images/og-default.svg"],
+    images: ["/images/og-default.png"],
   },
   alternates: {
     types: { "application/rss+xml": "/feed.xml" },

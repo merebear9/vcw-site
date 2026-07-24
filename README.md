@@ -130,5 +130,5 @@ production there.
 - **Tagline:** "Holding Power Accountable in Vermilion County"
 - **Motto:** "Accountability. Transparency. Exposure."
 - Colors, typography, and the wolf-head wordmark are defined in
-  `tailwind.config.ts` and `public/images/logo.svg`. Swap in the final logo
-  file at that same path once available.
+  `tailwind.config.ts` and `public/images/logo.png` (the real logo, cropped
+  and made transparent from the Facebook page asset).
