@@ -1,12 +1,13 @@
 // Vermilion County Watchdog — Prisma schema
-// SQLite by default (self-host friendly). Swap datasource to postgresql for production scale.
+// PostgreSQL-backed. Works with any Postgres host: Neon, Vercel Postgres,
+// Supabase, RDS, or a self-hosted instance on a VPS. See README for setup.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 

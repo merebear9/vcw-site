@@ -10,8 +10,9 @@ paid memberships, an anonymous tip line, and an admin dashboard.
 
 - **Framework:** Next.js 14 (App Router, TypeScript)
 - **Styling:** Tailwind CSS
-- **Database:** SQLite via Prisma (swap the datasource provider to `postgresql`
-  in `prisma/schema.prisma` to scale up — no other code changes required)
+- **Database:** PostgreSQL via Prisma, with proper migrations
+  (`prisma/migrations`). Works with any Postgres host — Neon, Vercel
+  Postgres, Supabase, RDS, or a self-hosted instance on a VPS.
 - **Auth:** NextAuth.js (email magic link + Google sign-in)
 - **Payments:** Stripe Checkout + webhooks for recurring memberships
 - **Content:** Article body is authored as Markdown. Seed articles live in
@@ -22,13 +23,32 @@ paid memberships, an anonymous tip line, and an admin dashboard.
 
 ## Getting Started
 
+You need a Postgres database to run this locally — either a free cloud one
+(easiest) or one running on your machine.
+
+**Option A — free cloud Postgres (recommended, 2 minutes):**
+Create a free database at [neon.com](https://neon.com) or
+[vercel.com/storage/postgres](https://vercel.com/storage/postgres) and copy
+the connection string it gives you.
+
+**Option B — local Postgres:**
+```bash
+# macOS
+brew install postgresql@16 && brew services start postgresql@16
+createuser -s vcw && createdb -O vcw vcw_dev
+# then use: postgresql://vcw@localhost:5432/vcw_dev
+```
+
+Then:
+
 ```bash
 npm install
 cp .env.example .env
-# edit .env — at minimum set NEXTAUTH_SECRET (openssl rand -base64 32)
+# edit .env — set DATABASE_URL to your connection string, and set
+# NEXTAUTH_SECRET (generate one with: openssl rand -base64 32)
 
-npm run db:push    # create the SQLite database from the Prisma schema
-npm run db:seed    # load 3 sample articles + 2 sample records + admin user
+npm run db:migrate   # applies prisma/migrations to your database
+npm run db:seed      # loads 3 sample articles + 2 sample records + admin user
 npm run dev
 ```
 
@@ -48,7 +68,7 @@ See `.env.example` for the full list. Highlights:
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `DATABASE_URL` | Yes | SQLite file path (or Postgres connection string) |
+| `DATABASE_URL` | Yes | Postgres connection string |
 | `NEXTAUTH_URL` | Yes | Canonical site URL, also used for SEO/OG tags |
 | `NEXTAUTH_SECRET` | Yes | Session encryption secret |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Optional | Enables "Continue with Google" |
@@ -84,7 +104,7 @@ user.
 /components       Reusable UI components
 /content/articles Seed article Markdown files (frontmatter + body)
 /lib              Prisma client, auth config, Stripe helpers, data access
-/prisma           schema.prisma + seed script
+/prisma           schema.prisma + migrations/ + seed script
 /public           Static assets — logo, placeholder images, uploaded PDFs
 /styles           (Tailwind lives in app/globals.css + tailwind.config.ts)
 ```
@@ -99,31 +119,67 @@ the filesystem is ephemeral** — swap these routes to upload to an object
 store (S3, R2, Vercel Blob, etc.) before relying on file uploads in
 production there.
 
-## Deployment
+## Deploying to Vercel — step by step
 
-### Vercel
+1. **Push the code to GitHub** (if it isn't already).
 
-1. Push this repo to GitHub and import it in Vercel.
-2. Set all required environment variables from `.env.example` in the Vercel
-   project settings.
-3. Switch `DATABASE_URL` to a hosted Postgres/SQLite-compatible database
-   (e.g. Neon, Turso, or Vercel Postgres) — Vercel's filesystem is read-only
-   at runtime, so a local SQLite file won't persist between deploys.
-4. Add the Stripe webhook endpoint pointing at your deployed
-   `/api/stripe/webhook` URL.
-5. If you need tip/document file uploads in production, point those upload
-   routes at an object store (see above).
+2. **Create a Postgres database.** Go to
+   [neon.com](https://neon.com) (or Vercel's own Postgres add-on at
+   vercel.com/storage/postgres), create a free database, and copy the
+   connection string. It looks like
+   `postgresql://user:password@host/dbname?sslmode=require`.
 
-### VPS / Self-Hosted
+3. **Import the project into Vercel.**
+   - Go to [vercel.com/new](https://vercel.com/new), sign in with GitHub,
+     and select this repo.
+   - Framework preset should auto-detect as Next.js — leave the build
+     command as the default (`npm run build`); it already runs
+     `prisma migrate deploy` before building, so your database schema is
+     created/updated automatically on every deploy.
 
-1. `npm install && npm run build`
-2. Set environment variables (a `.env` file works fine here since the
+4. **Set environment variables** in the Vercel project settings
+   (Settings → Environment Variables). At minimum:
+   - `DATABASE_URL` — the connection string from step 2
+   - `NEXTAUTH_URL` — your Vercel deployment URL, e.g. `https://vcw-site.vercel.app`
+   - `NEXTAUTH_SECRET` — generate with `openssl rand -base64 32`
+   - `STRIPE_SECRET_KEY` — if you want memberships to work
+   - Any of the optional ones from `.env.example` you want enabled
+     (Google sign-in, email sign-in, Stripe price IDs)
+
+5. **Click Deploy.** Vercel builds the project, applies the Prisma
+   migrations against your new database, and gives you a live URL.
+
+6. **Seed sample content (one time only).** From your local machine, with
+   `DATABASE_URL` in your `.env` pointed at the *same* production database
+   from step 2, run:
+   ```bash
+   npm run db:seed
+   ```
+   This is a one-time step — after that, use the admin dashboard
+   (`/admin`) to manage articles and records going forward.
+
+7. **Add the Stripe webhook** pointing at
+   `https://<your-domain>/api/stripe/webhook`, listening for
+   `checkout.session.completed`, `customer.subscription.updated`, and
+   `customer.subscription.deleted`. Put the signing secret into the
+   `STRIPE_WEBHOOK_SECRET` environment variable in Vercel and redeploy.
+
+8. **File uploads** (`/tips`, `/admin/documents`) won't persist on Vercel's
+   filesystem between requests — see "Notes on File Uploads" above. The
+   rest of the site works fully without this.
+
+## VPS / Self-Hosted
+
+1. Install Postgres on the VPS (or point at a hosted one) and create a
+   database.
+2. `npm install && npm run build` (this runs `prisma migrate deploy`
+   automatically before building).
+3. Set environment variables (a `.env` file works fine here since the
    filesystem is persistent).
-3. `npm run db:push && npm run db:seed` (seed once).
-4. `npm run start`, reverse-proxied behind Nginx/Caddy with TLS.
-5. SQLite and local file uploads both work natively in this setup — no
-   external services required beyond Stripe and SMTP (if using email
-   sign-in).
+4. `npm run db:seed` once, to load sample content.
+5. `npm run start`, reverse-proxied behind Nginx/Caddy with TLS.
+6. Local file uploads work natively in this setup — no object storage
+   required.
 
 ## Brand
 
