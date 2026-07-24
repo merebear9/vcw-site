@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" width="1200" height="675">
+  <rect width="1200" height="675" fill="#0a0a0a"/>
+  <rect width="1200" height="675" fill="none" stroke="#cc0000" stroke-width="12"/>
+  <rect x="0" y="0" width="220" height="56" fill="#cc0000"/>
+  <text x="20" y="38" font-family="Arial, sans-serif" font-weight="900" font-size="28" fill="#0a0a0a" letter-spacing="2">MEMBERS ONLY</text>
+  <text x="60" y="330" font-family="Arial, sans-serif" font-weight="900" font-size="52" fill="#cc0000" letter-spacing="2">PUBLIC SAFETY</text>
+  <text x="60" y="400" font-family="Arial, sans-serif" font-weight="900" font-size="38" fill="#ffffff" letter-spacing="1">POLICE OVERTIME</text>
+  <text x="60" y="450" font-family="Arial, sans-serif" font-weight="900" font-size="38" fill="#ffffff" letter-spacing="1">INVESTIGATION</text>
+  <text x="60" y="500" font-family="Arial, sans-serif" font-size="24" fill="#999999">Payments tripled. Oversight didn't.</text>
+</svg>

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 220" width="640" height="220" role="img" aria-label="Vermilion County Watchdog logo">
+  <g id="wolf" transform="translate(10,10)">
+    <path d="M90 10
+             C60 10 35 30 25 60
+             C18 82 15 105 20 128
+             C10 132 2 140 0 150
+             C14 148 26 150 34 158
+             C30 168 30 178 36 188
+             C44 178 52 172 62 170
+             C74 182 90 190 108 190
+             C126 190 142 182 154 170
+             C164 172 172 178 180 188
+             C186 178 186 168 182 158
+             C190 150 202 148 216 150
+             C214 140 206 132 196 128
+             C201 105 198 82 191 60
+             C181 30 156 10 126 10
+             C118 22 110 22 108 10
+             C104 22 96 22 90 10 Z"
+          fill="#cc0000" stroke="#cc0000" stroke-width="2"/>
+    <polygon points="30,55 10,15 55,42" fill="#cc0000"/>
+    <polygon points="182,55 202,15 157,42" fill="#cc0000"/>
+    <path d="M70 120 L95 100 L108 120 L121 100 L146 120 L108 175 Z" fill="#0a0a0a"/>
+    <circle cx="72" cy="80" r="7" fill="#0a0a0a"/>
+    <circle cx="144" cy="80" r="7" fill="#0a0a0a"/>
+    <path d="M60 120 L20 145 L60 150 Z" fill="#0a0a0a"/>
+    <path d="M156 120 L196 145 L156 150 Z" fill="#0a0a0a"/>
+  </g>
+  <g transform="translate(230,40)" font-family="Arial, Helvetica, sans-serif">
+    <text x="0" y="30" font-size="26" font-weight="700" letter-spacing="3" fill="#cc0000">VERMILION COUNTY</text>
+    <text x="0" y="78" font-size="46" font-weight="900" letter-spacing="2" fill="#cc0000">WATCHDOG</text>
+    <text x="0" y="110" font-size="14" font-weight="600" letter-spacing="4" fill="#ffffff">ACCOUNTABILITY. TRANSPARENCY. EXPOSURE.</text>
+  </g>
+</svg>

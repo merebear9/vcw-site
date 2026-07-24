@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+}
+
+* {
+  border-color: #2a2a2a;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer components {
+  .heading-font {
+    @apply font-heading uppercase tracking-wide;
+  }
+
+  .btn-primary {
+    @apply heading-font inline-flex items-center justify-center gap-2 bg-vcw-red px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-vcw-redLight;
+  }
+
+  .btn-outline {
+    @apply heading-font inline-flex items-center justify-center gap-2 border-2 border-vcw-red px-6 py-3 text-sm font-semibold text-vcw-red transition-colors hover:bg-vcw-red hover:text-white;
+  }
+
+  .btn-secondary {
+    @apply heading-font inline-flex items-center justify-center gap-2 border border-vcw-gray/40 px-6 py-3 text-sm font-semibold text-white transition-colors hover:border-white;
+  }
+
+  .category-badge {
+    @apply heading-font inline-block bg-vcw-red px-2.5 py-1 text-[11px] font-bold tracking-wider text-white;
+  }
+
+  .section-title {
+    @apply heading-font text-2xl font-bold text-white sm:text-3xl;
+  }
+
+  .card {
+    @apply border border-vcw-border bg-vcw-charcoal;
+  }
+}
+
+/* Long-form article body copy */
+.article-body {
+  @apply font-serif text-lg leading-relaxed text-white/90;
+}
+
+.article-body p {
+  margin-bottom: 1.5em;
+}
+
+.article-body h2 {
+  @apply heading-font mt-10 mb-4 text-2xl text-white;
+}
+
+.article-body h3 {
+  @apply heading-font mt-8 mb-3 text-xl text-white;
+}
+
+.article-body a {
+  @apply text-vcw-red underline decoration-vcw-red/50 underline-offset-2 hover:text-vcw-redLight;
+}
+
+.article-body ul,
+.article-body ol {
+  @apply mb-6 ml-6 list-disc space-y-2;
+}
+
+.article-body blockquote {
+  @apply border-l-4 border-vcw-red pl-4 italic text-vcw-gray;
+}
